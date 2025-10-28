@@ -1,0 +1,11 @@
+# Cose da fare
+- [X] Lexer base con espressioni
+- [X] Parser base con espressioni
+- [X] Transpiler base: stampa il risultato delle espressioni
+- [ ] Input/Output base
+- [ ] Definizione di variabili
+- [ ] Blocchi if/else/elif
+- [ ] Blocchi while
+- [ ] Blocchi for
+- [ ] Extra?
+- [ ] Syntax Highlighter

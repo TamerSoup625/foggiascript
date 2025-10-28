@@ -1,0 +1,48 @@
+class CompilationError(Exception):
+    """
+    Un errore che avviene durante la compilazione.
+
+    `args` è una tupla `(str, int)`:
+    - `args[0]` spiega in modo leggibile qual è l'errore
+    - `args[1]` è la posizione in caratteri dove c'è l'errore
+    """
+
+
+    def __init__(self, exp: str, pos: int):
+        super().__init__(exp, pos)
+
+
+class LexerError(CompilationError):
+    """Errore durante la fase di tokenizzazione."""
+
+class UnknownCharacter(LexerError):
+    """Errore di carattere sconosciuto."""
+
+
+class ParserError(CompilationError):
+    """Errore durante la fase di parsing."""
+
+class ExpectedLiteral(ParserError):
+    """Errore di literal aspettato."""
+
+class ClosedBracket(ParserError):
+    """Errore di parentesi chiusa inaspettata."""
+
+class UnclosedBracket(ParserError):
+    """Errore di parentesi non chiusa."""
+
+class EmptyBracket(ParserError):
+    """Errore di parentesi vuota."""
+
+class NoLeftSideExpr(ParserError):
+    """Errore di nessun'espressione a sinistra di un simbolo."""
+
+class NoRightSideExpr(ParserError):
+    """Errore di nessun'espressione a destra di un simbolo."""
+
+
+
+
+
+class ReallyMessedUp(Exception):
+    """Errore per qualcosa che è andato veramente storto."""
