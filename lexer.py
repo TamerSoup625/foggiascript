@@ -38,7 +38,7 @@ class Lexer:
         float_part = re_match.group("float")
         int_part = re_match.group("int")
         if float_part == "f":
-            return (float(int_part), int_part)
+            return (float(int_part), whole_number)
         elif float_part:
             return (float(whole_number), whole_number)
         return (int(whole_number), whole_number)
