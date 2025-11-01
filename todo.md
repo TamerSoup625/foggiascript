@@ -3,6 +3,7 @@
 - [X] Parser base con espressioni
 - [X] Transpiler base: stampa il risultato delle espressioni
 - [ ] Input/Output base
+- [ ] Documentazione
 - [ ] Definizione di variabili
 - [ ] Stringhe
 - [ ] Blocchi if/else/elif
