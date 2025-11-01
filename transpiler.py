@@ -1,7 +1,7 @@
 from tokens import TokenID
 from astnodes import *
 import localization as loc
-from errors import ReallyMessedUp
+import errors
 
 
 class Transpiler:
@@ -25,9 +25,18 @@ class Transpiler:
                 TokenID.DIV: "/",
             }[node.operator]
             return f"({cls.transpile_generic(node.l_operand)}{operator}{cls.transpile_generic(node.r_operand)})"
-        elif isinstance(node, BasicBlock):
-            return "".join(f"console.log({cls.transpile_generic(x)});" for x in node.expressions)
-        raise ReallyMessedUp()
+        elif isinstance(node, NamedVariable):
+            match node.name:
+                case loc.Builtins.print_:
+                    return "console.log"
+                case name:
+                    raise errors.UndefinedVariable(loc.ErrorDesc.undefined_variable.format(name=name), node.src_position)
+        elif isinstance(node, FunctionCall):
+            comma_separated_args = ",".join(f"({cls.transpile_generic(x)})" for x in node.arguments)
+            return f"({cls.transpile_generic(node.function_node)})({comma_separated_args})"
+        elif isinstance(node, Block):
+            return "".join(f"{cls.transpile_generic(x)};" for x in node.expressions)
+        raise errors.ReallyMessedUp()
 
 
     @classmethod

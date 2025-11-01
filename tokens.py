@@ -34,8 +34,14 @@ class TokenID(Enum):
     """Ritorno a capo, sia effettivo (\\n) o un punto e virgola. Il secondo elemento è sempre `None`."""
     CALL_OP = auto()
     """Token tra un oggetto e una parentesi contenente i suoi argomenti per chiamare quell'ogggetto. Il secondo elemento è sempre `None`."""
+    NAME = auto()
+    """Nome di una variabile, funzione, eccetera. Il secondo argomento è il suo nome effettivo."""
+    COMMA = auto()
+    """Una virgola (,). Il secondo elemento è sempre `None`."""
     PREPARSED = auto()
     """Valore speciale, indica qualcosa già parsato. Il secondo elemento è l'`ASTNode`."""
+    PREPARSED_LIST = auto()
+    """Valore speciale, indica qualcosa già parsato separato da virgole. Il secondo elemento è la lista di `ASTNode`."""
 
 
 Token: TypeAlias = tuple[TokenID, Any, int]

@@ -13,6 +13,13 @@ class Misc(ABC):
     code_marker = 'Codice scritto con FoggiaScript'
 
 
+class Builtins(ABC):
+    """
+    Contiene nomi di funzioni e variabili builtin.
+    """
+    print_ = "print"
+
+
 class ErrorDesc(ABC):
     """
     Contiene frasi di errore.
@@ -24,3 +31,6 @@ class ErrorDesc(ABC):
     empty_bracket = 'Parentesi è vuota nel suo interno.'
     no_left_side_expr = "Aspettavo un'espressione a sinistra di \"{char}\"."
     no_right_side_expr = "Aspettavo un'espressione a destra di \"{char}\"."
+    extra_comma = "C'è una virgola di troppo."
+    no_reason_comma = "Questa virgola non ha significato qui."
+    undefined_variable = 'La variabile "{name}" non è definita.'

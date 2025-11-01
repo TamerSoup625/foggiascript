@@ -11,18 +11,22 @@ class Parser:
     """
 
 
-    OP_ORDER: tuple[tuple[TokenID, ...], ...] = (
-        (TokenID.PLUS, TokenID.MINUS),
-        (TokenID.TIMES, TokenID.DIV),
-        (TokenID.UNARY_PLUS, TokenID.UNARY_MINUS),
+    OP_ORDER: tuple[list[TokenID], ...] = (
+        [TokenID.PLUS, TokenID.MINUS],
+        [TokenID.TIMES, TokenID.DIV],
+        [TokenID.UNARY_PLUS, TokenID.UNARY_MINUS],
+        [TokenID.CALL_OP],
     )
     """L'ordine delle varie operazioni, dalla meno prioritaria alla più prioritaria."""
 
 
     @classmethod
     def parse_literal(cls, tokens: tuple[Token, ...], src: str) -> ExpressionNode | None:
-        if len(tokens) == 1 and tokens[0][0] in [TokenID.INT, TokenID.FLOAT]:
-            return LiteralValue(tokens[0][1])
+        if len(tokens) == 1:
+            if tokens[0][0] in [TokenID.INT, TokenID.FLOAT]:
+                return LiteralValue(tokens[0][2], tokens[0][1])
+            elif tokens[0][0] == TokenID.NAME:
+                return NamedVariable(tokens[0][2], tokens[0][1])
         return None
 
 
@@ -55,6 +59,21 @@ class Parser:
 
 
     @classmethod
+    def separate_tokens_by_comma(cls, tokens: tuple[Token, ...], src: str) -> list[list[Token]]:
+        answer: list[list[Token]] = [[]]
+        for x in tokens:
+            if x[0] == TokenID.COMMA:
+                if len(answer[-1]) == 0:
+                    raise errors.ExtraComma(loc.ErrorDesc.extra_comma, x[2])
+                answer.append(list())
+                continue
+            answer[-1].append(x)
+        if len(answer[-1]) == 0:
+            answer.pop()
+        return answer
+
+
+    @classmethod
     def parse_expression(cls, tokens: tuple[Token, ...], src: str) -> ExpressionNode:
         """
         `tokens` deve contenere almeno un elemento.
@@ -72,6 +91,14 @@ class Parser:
             part_before = tokens[:l_parenthesis_pos]
             part_after = tokens[r_parenthesis_pos + 1:]
             part_inside = tokens[l_parenthesis_pos + 1 : r_parenthesis_pos]
+            if 0 < l_parenthesis_pos <= len(tokens) and tokens[l_parenthesis_pos - 1][0] == TokenID.CALL_OP:
+                inside_token_list = cls.separate_tokens_by_comma(part_inside, src)
+                inside_preparsed: Token = (
+                        TokenID.PREPARSED_LIST,
+                        tuple(cls.parse_expression(tuple(x), src) for x in inside_token_list),
+                        tokens[l_parenthesis_pos][2],
+                )
+                return cls.parse_expression(part_before + (inside_preparsed,) + part_after, src)
             if len(part_inside) == 0:
                 raise errors.EmptyBracket(loc.ErrorDesc.empty_bracket, tokens[l_parenthesis_pos][2])
             inside_token: Token = (TokenID.PREPARSED, cls.parse_expression(part_inside, src), tokens[l_parenthesis_pos][2])
@@ -85,13 +112,22 @@ class Parser:
             for i, token in reversed_enumerate(tokens) if is_left_associative else enumerate(tokens):
                 if token[0] not in opers:
                     continue
-                if token[0] in {TokenID.UNARY_PLUS, TokenID.UNARY_MINUS}:
+                if token[0] == TokenID.CALL_OP:
+                    left_side = tokens[:i]
+                    if len(left_side) == 0:
+                        raise errors.NoLeftSideExpr(loc.ErrorDesc.no_left_side_expr.format(char=src[tokens[i][2]]), tokens[i][2])
+                    func_expr = cls.parse_expression(left_side, src)
+                    assert tokens[i + 1][0] == TokenID.PREPARSED_LIST
+                    argument_list: tuple[ExpressionNode, ...] = tokens[i + 1][1]
+                    assert len(tokens[i + 1:]) == 1
+                    return FunctionCall(left_side[0][2], func_expr, argument_list)
+                elif token[0] in {TokenID.UNARY_PLUS, TokenID.UNARY_MINUS}:
                     assert i == 0
                     right_side = tokens[i + 1:]
                     if len(right_side) == 0:
                         raise errors.NoRightSideExpr(loc.ErrorDesc.no_right_side_expr.format(char=src[tokens[i][2]]), tokens[i][2])
                     right_expr = cls.parse_expression(right_side, src)
-                    return UnaryOp(token[0], right_expr)
+                    return UnaryOp(token[2], token[0], right_expr)
                 else:
                     left_side = tokens[:i]
                     if len(left_side) == 0:
@@ -101,14 +137,16 @@ class Parser:
                         raise errors.NoRightSideExpr(loc.ErrorDesc.no_right_side_expr.format(char=src[tokens[i][2]]), tokens[i][2])
                     left_expr = cls.parse_expression(left_side, src)
                     right_expr = cls.parse_expression(right_side, src)
-                    return BinaryOp(token[0], left_expr, right_expr)
-        # TODO: Puoi arrivare qui con (1)(1)
-        raise errors.ReallyMessedUp()
+                    return BinaryOp(token[2], token[0], left_expr, right_expr)
+        for x in tokens:
+            if x[0] == TokenID.COMMA:
+                raise errors.NoReasonComma(loc.ErrorDesc.no_reason_comma, x[2])
+        raise errors.ReallyMessedUp(tokens)
 
 
     @classmethod
     def parse(cls, tokens: tuple[Token, ...], src: str) -> ASTNode:
-        answer = BasicBlock([])
+        answer = Block(0, [])
         token_lines = split_when(tokens, lambda x : x[0] == TokenID.LINE_BREAK)
         for x in token_lines:
             if len(x) > 0:

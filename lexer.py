@@ -23,6 +23,12 @@ class Lexer:
 
     Un numero intero seguito da "f" (esempio 25f) conta come decimale.
     """
+    RE_NAME = re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*")
+    """
+    Matcha un nome, ossia una qualsiasi sequenza di caratteri alfanumerici e/o underscore.
+
+    Il primo carattere non può essere una cifra.
+    """
 
 
     @staticmethod
@@ -48,7 +54,7 @@ class Lexer:
     def token_follows_binary_op(token: Token | None) -> bool:
         if token == None:
             return False
-        if token[0] in {TokenID.INT, TokenID.FLOAT, TokenID.PREPARSED}:
+        if token[0] in {TokenID.INT, TokenID.FLOAT, TokenID.PREPARSED, TokenID.NAME}:
             return True
         if token[0] == TokenID.PARENTHESIS and token[1] == CLOSED:
             return True
@@ -81,10 +87,15 @@ class Lexer:
                     answer.append((TokenID.DIV, None, current_pos))
                     current_pos += 1
                 case "(":
+                    if cls.token_follows_binary_op(last_token):
+                        answer.append((TokenID.CALL_OP, None, current_pos))
                     answer.append((TokenID.PARENTHESIS, False, current_pos))
                     current_pos += 1
                 case ")":
                     answer.append((TokenID.PARENTHESIS, True, current_pos))
+                    current_pos += 1
+                case ",":
+                    answer.append((TokenID.COMMA, None, current_pos))
                     current_pos += 1
                 case char:
                     number_value, number_str = cls.number_match(s, current_pos)
@@ -94,6 +105,11 @@ class Lexer:
                                 else TokenID.FLOAT, number_value, current_pos
                         ))
                         current_pos += len(number_str)
+                        continue
+                    name_match = cls.RE_NAME.match(s, current_pos)
+                    if name_match != None:
+                        answer.append((TokenID.NAME, name_match.group(), current_pos))
+                        current_pos += len(name_match.group())
                         continue
                     raise errors.UnknownCharacter(
                             loc.ErrorDesc.unknown_character.format(char=char), current_pos

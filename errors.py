@@ -40,6 +40,19 @@ class NoLeftSideExpr(ParserError):
 class NoRightSideExpr(ParserError):
     """Errore di nessun'espressione a destra di un simbolo."""
 
+class ExtraComma(ParserError):
+    """Errore di un comma di troppo (espressione vuota)."""
+
+class NoReasonComma(ParserError):
+    """Errore di una virgola in un posto in cui non dovrebbe stare."""
+
+
+class TranspilerError(CompilationError):
+    """Errore durante la fase di transpiliazione (si dice?)."""
+
+class UndefinedVariable(TranspilerError):
+    """Errore di variabile non definita."""
+
 
 
 

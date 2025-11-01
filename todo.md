@@ -4,6 +4,7 @@
 - [X] Transpiler base: stampa il risultato delle espressioni
 - [ ] Input/Output base
 - [ ] Definizione di variabili
+- [ ] Stringhe
 - [ ] Blocchi if/else/elif
 - [ ] Blocchi while
 - [ ] Blocchi for
