@@ -29,6 +29,10 @@ class Lexer:
 
     Il primo carattere non può essere una cifra.
     """
+    RE_STRING = re.compile(r"\"(|(?:\\\\)+|.*?[^\\](?:\\\\)+|.*?[^\\])\"")
+    """
+    Matcha una stringa rinchiusa tra due virgolette. Include l'escape delle virgolette e dello slash.
+    """
 
 
     @staticmethod
@@ -59,6 +63,14 @@ class Lexer:
         if token[0] == TokenID.PARENTHESIS and token[1] == CLOSED:
             return True
         return False
+
+
+    @staticmethod
+    def unescape_str(string: str) -> str:
+        return (string
+                .replace('\\"', '"')
+                .replace("\\\\", "\\")
+                )
 
 
     @classmethod
@@ -97,6 +109,12 @@ class Lexer:
                 case ",":
                     answer.append((TokenID.COMMA, None, current_pos))
                     current_pos += 1
+                case '"':
+                    str_match = cls.RE_STRING.match(s, current_pos)
+                    if str_match == None:
+                        raise errors.UnterminatedString(loc.ErrorDesc.unterminated_comma, current_pos)
+                    answer.append((TokenID.STRING, cls.unescape_str(str_match.group(1)), current_pos))
+                    current_pos += len(str_match.group())
                 case char:
                     number_value, number_str = cls.number_match(s, current_pos)
                     if number_str != None:

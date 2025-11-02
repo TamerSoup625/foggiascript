@@ -18,6 +18,9 @@ class LexerError(CompilationError):
 class UnknownCharacter(LexerError):
     """Errore di carattere sconosciuto."""
 
+class UnterminatedString(LexerError):
+    """Errore di stringa non terminata."""
+
 
 class ParserError(CompilationError):
     """Errore durante la fase di parsing."""

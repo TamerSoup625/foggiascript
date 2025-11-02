@@ -23,7 +23,7 @@ class Parser:
     @classmethod
     def parse_literal(cls, tokens: tuple[Token, ...], src: str) -> ExpressionNode | None:
         if len(tokens) == 1:
-            if tokens[0][0] in [TokenID.INT, TokenID.FLOAT]:
+            if tokens[0][0] in [TokenID.INT, TokenID.FLOAT, TokenID.STRING]:
                 return LiteralValue(tokens[0][2], tokens[0][1])
             elif tokens[0][0] == TokenID.NAME:
                 return NamedVariable(tokens[0][2], tokens[0][1])

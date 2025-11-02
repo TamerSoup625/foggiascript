@@ -10,9 +10,16 @@ class Transpiler:
     """
 
 
+    @staticmethod
+    def escape_str(string: str) -> str:
+        return string.replace("\\", "\\\\").replace('"', '\\"')
+
+
     @classmethod
     def transpile_generic(cls, node: ASTNode) -> str:
         if isinstance(node, LiteralValue):
+            if isinstance(node.value, str):
+                return '"' + cls.escape_str(node.value) + '"'
             return str(node.value)
         elif isinstance(node, UnaryOp):
             operator = {TokenID.UNARY_PLUS: "+", TokenID.UNARY_MINUS: "-"}[node.operator]

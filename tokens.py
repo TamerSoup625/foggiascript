@@ -38,6 +38,8 @@ class TokenID(Enum):
     """Nome di una variabile, funzione, eccetera. Il secondo argomento è il suo nome effettivo."""
     COMMA = auto()
     """Una virgola (,). Il secondo elemento è sempre `None`."""
+    STRING = auto()
+    """Stringa di caratteri. Il secondo elemento è il valore della stringa."""
     PREPARSED = auto()
     """Valore speciale, indica qualcosa già parsato. Il secondo elemento è l'`ASTNode`."""
     PREPARSED_LIST = auto()

@@ -34,3 +34,4 @@ class ErrorDesc(ABC):
     extra_comma = "C'è una virgola di troppo."
     no_reason_comma = "Questa virgola non ha significato qui."
     undefined_variable = 'La variabile "{name}" non è definita.'
+    unterminated_comma = "Stringa non è stata chiusa."

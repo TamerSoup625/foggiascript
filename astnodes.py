@@ -18,7 +18,7 @@ class ExpressionNode(ASTNode):
 @dataclass
 class LiteralValue(ExpressionNode):
     """Una costante scritta letteralmente."""
-    value: int | float
+    value: int | float | str
 
 @dataclass
 class NamedVariable(ExpressionNode):
