@@ -40,6 +40,8 @@ class TokenID(Enum):
     """Una virgola (,). Il secondo elemento è sempre `None`."""
     STRING = auto()
     """Stringa di caratteri. Il secondo elemento è il valore della stringa."""
+    DOT = auto()
+    """Punto (.) utilizzato per accedere a un attributo o metodo. Il secondo argomento è sempre `None`."""
     PREPARSED = auto()
     """Valore speciale, indica qualcosa già parsato. Il secondo elemento è l'`ASTNode`."""
     PREPARSED_LIST = auto()

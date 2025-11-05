@@ -32,10 +32,18 @@ class Transpiler:
                 TokenID.DIV: "/",
             }[node.operator]
             return f"({cls.transpile_generic(node.l_operand)}{operator}{cls.transpile_generic(node.r_operand)})"
+        elif isinstance(node, MemberReference):
+            left_side = cls.transpile_generic(node.operand)
+            if left_side != "globalThis":
+                raise errors.CannotAccessAttribute(loc.ErrorDesc.cannot_access_attribute.format(name=node.member), node.src_position)
+            return f"({left_side}).{node.member}"
         elif isinstance(node, NamedVariable):
             match node.name:
                 case loc.Builtins.print_:
                     return "console.log"
+                case loc.Builtins.javascript:
+                    # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis
+                    return "globalThis"
                 case name:
                     raise errors.UndefinedVariable(loc.ErrorDesc.undefined_variable.format(name=name), node.src_position)
         elif isinstance(node, FunctionCall):

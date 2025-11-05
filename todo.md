@@ -2,7 +2,7 @@
 - [X] Lexer base con espressioni
 - [X] Parser base con espressioni
 - [X] Transpiler base: stampa il risultato delle espressioni
-- [ ] Input/Output base
+- [X] Input/Output base
 - [X] Documentazione
 - [ ] Commenti
 - [ ] Main

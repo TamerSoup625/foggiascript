@@ -18,6 +18,7 @@ class Builtins(ABC):
     Contiene nomi di funzioni e variabili builtin.
     """
     print_ = "print"
+    javascript = "JavaScript"
 
 
 class ErrorDesc(ABC):
@@ -35,3 +36,7 @@ class ErrorDesc(ABC):
     no_reason_comma = "Questa virgola non ha significato qui."
     undefined_variable = 'La variabile "{name}" non è definita.'
     unterminated_comma = "Stringa non è stata chiusa."
+    expected_member = "Aspettavo il nome del metodo o attributo dopo il punto."
+    no_member = "Non c'è il nome del metodo o attributo dopo il punto."
+    dot_without_expr = "Aspettavo un'espressione prima del punto."
+    cannot_access_attribute = "Non puoi accedere all'attributo \"{name}\" dell'oggetto."

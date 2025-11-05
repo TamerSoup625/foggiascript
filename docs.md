@@ -30,8 +30,12 @@ Le stringhe sono delimitati da doppie virgolette. Per ora puoi fare l'escape del
 
 Chiamale come fai di solito. Ancora non le puoi creare te.
 
-## Funzioni builtin
+## Cose builtin
 
 ### `print(...)`
 
 Stampa dei valori alla console.
+
+### `JavaScript`
+
+Accedi allo scope originario di JavaScript. Ad esempio puoi usare `JavaScript.prompt` come input semplice per il testing.

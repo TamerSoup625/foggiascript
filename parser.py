@@ -2,7 +2,7 @@ from tokens import Token, TokenID
 from astnodes import *
 import errors
 import localization as loc
-from util import reversed_enumerate, split_when
+from util import reversed_enumerate, split_when, tuple_get
 
 
 class Parser:
@@ -15,6 +15,7 @@ class Parser:
         [TokenID.PLUS, TokenID.MINUS],
         [TokenID.TIMES, TokenID.DIV],
         [TokenID.UNARY_PLUS, TokenID.UNARY_MINUS],
+        [TokenID.DOT],
         [TokenID.CALL_OP],
     )
     """L'ordine delle varie operazioni, dalla meno prioritaria alla più prioritaria."""
@@ -121,6 +122,20 @@ class Parser:
                     argument_list: tuple[ExpressionNode, ...] = tokens[i + 1][1]
                     assert len(tokens[i + 1:]) == 1
                     return FunctionCall(left_side[0][2], func_expr, argument_list)
+                elif token[0] == TokenID.DOT:
+                    left_side = tokens[:i]
+                    if len(left_side) == 0:
+                        raise errors.DotWithoutExpr(loc.ErrorDesc.dot_without_expr, token[2])
+                    attribute: Token | None = tuple_get(tokens, i + 1)
+                    if attribute == None:
+                        raise errors.NoMember(loc.ErrorDesc.no_member, token[2])
+                    right_side = tokens[i + 2:]
+                    if attribute[0] != TokenID.NAME:
+                        raise errors.ExpectedMember(loc.ErrorDesc.expected_member, attribute[2])
+                    left_expr = cls.parse_expression(left_side, src)
+                    member_reference = MemberReference(tokens[0][2], left_expr, attribute[1])
+                    member_ref_token: Token = (TokenID.PREPARSED, member_reference, tokens[0][2])
+                    return cls.parse_expression((member_ref_token,) + right_side, src)
                 elif token[0] in {TokenID.UNARY_PLUS, TokenID.UNARY_MINUS}:
                     assert i == 0
                     right_side = tokens[i + 1:]

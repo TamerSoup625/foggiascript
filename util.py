@@ -15,3 +15,10 @@ def split_when(iterable, separator_function) -> list[list]:
             current.append(item)
     result.append(current)
     return result
+
+
+def tuple_get(t: tuple, index: int, default = None):
+    try:
+        return t[index]
+    except IndexError:
+        return default

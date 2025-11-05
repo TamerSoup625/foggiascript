@@ -49,12 +49,24 @@ class ExtraComma(ParserError):
 class NoReasonComma(ParserError):
     """Errore di una virgola in un posto in cui non dovrebbe stare."""
 
+class ExpectedMember(ParserError):
+    """Errore quando si aspettava il nome del membro dopo il punto."""
+
+class NoMember(ParserError):
+    """Errore quando non c'è il nome del membro dopo il punto."""
+
+class DotWithoutExpr(ParserError):
+    """Errore di punto senza espressione su cui accedere."""
+
 
 class TranspilerError(CompilationError):
     """Errore durante la fase di transpiliazione (si dice?)."""
 
 class UndefinedVariable(TranspilerError):
     """Errore di variabile non definita."""
+
+class CannotAccessAttribute(TranspilerError):
+    """Errore di membro non accessibile."""
 
 
 

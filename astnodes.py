@@ -44,6 +44,12 @@ class FunctionCall(ExpressionNode):
     function_node: ExpressionNode
     arguments: tuple[ExpressionNode, ...]
 
+@dataclass
+class MemberReference(ExpressionNode):
+    """Un accesso a un attributo di un'espressione"""
+    operand: ExpressionNode
+    member: str
+
 
 @dataclass
 class BasicBlock(ASTNode):
