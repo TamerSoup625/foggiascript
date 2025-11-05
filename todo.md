@@ -5,6 +5,7 @@
 - [ ] Input/Output base
 - [X] Documentazione
 - [ ] Commenti
+- [ ] Main
 - [ ] Definizione di variabili
 - [ ] Metodi per stringhe
 - [ ] Blocchi if/else/elif
