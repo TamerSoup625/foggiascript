@@ -17,4 +17,5 @@ Il file `localization.py` contiene varie parole e frasi. Se non sono in foggiano
 - Scrivi espressioni
 - Interi, Float, Stringhe
 - Funzione `print()`
+- Accesso diretto a JS perché sono pigro
 - Basta
