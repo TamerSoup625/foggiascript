@@ -2,7 +2,11 @@
 
 FoggiaScript è il primo linguaggio di programmazione esoterico foggiano!
 
-E' ancora in via di sviluppo, per favore aspettate un po'.
+Puoi scrivere codice da convertire in JavaScript, ma in modo foggiano.
+
+```js
+print("Ciao Mondo!")
+```
 
 Il file `localization.py` contiene varie parole e frasi. Se non sono in foggiano, lo diventeranno.
 
