@@ -40,3 +40,4 @@ class ErrorDesc(ABC):
     no_member = "Non c'è il nome del metodo o attributo dopo il punto."
     dot_without_expr = "Aspettavo un'espressione prima del punto."
     cannot_access_attribute = "Non puoi accedere all'attributo \"{name}\" dell'oggetto."
+    unclosed_comment = 'Commento multilinea non è stato chiuso, utilizzare "]#".'

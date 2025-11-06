@@ -21,6 +21,9 @@ class UnknownCharacter(LexerError):
 class UnterminatedString(LexerError):
     """Errore di stringa non terminata."""
 
+class UnclosedComment(LexerError):
+    """Errore di commento non chiuso."""
+
 
 class ParserError(CompilationError):
     """Errore durante la fase di parsing."""

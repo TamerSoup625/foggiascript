@@ -73,9 +73,27 @@ class Lexer:
                 )
 
 
+    @staticmethod
+    def get_multiline_comment_lenght(string: str, start: int) -> int:
+        """Restituisce la lunghezza dell'intero commento multilinea partendo dopo il simbolo del commento multilinea `#[`"""
+        bracket_count = 1
+        current_pos = start
+        while current_pos + 1 < len(string) and bracket_count > 0:
+            if string[current_pos:current_pos + 2] == "#[":
+                bracket_count += 1
+                current_pos += 1
+            if string[current_pos:current_pos + 2] == "]#":
+                bracket_count -= 1
+                current_pos += 1
+            current_pos += 1
+        if bracket_count > 0:
+            raise errors.UnclosedComment(loc.ErrorDesc.unclosed_comment, start)
+        return current_pos - start + 2
+
+
     @classmethod
     def tokenize(cls, s: str) -> list[Token]:
-        """A partire dal testo di input `s`, restituisce una lista di token rappresentati come tuple"""
+        """A partire dal testo di input `s`, restituisce una lista di token rappresentati come tuple."""
         current_pos: int = 0
         answer: list[Token] = []
         while current_pos < len(s):
@@ -118,6 +136,14 @@ class Lexer:
                 case ".":
                     answer.append((TokenID.DOT, None, current_pos))
                     current_pos += 1
+                case "#":
+                    if current_pos + 1 < len(s) and s[current_pos + 1] == "[":
+                        current_pos += cls.get_multiline_comment_lenght(s, current_pos + 2)
+                        continue
+                    while s[current_pos] != "\n":
+                        current_pos += 1
+                        if current_pos >= len(s):
+                            break
                 case char:
                     number_value, number_str = cls.number_match(s, current_pos)
                     if number_str != None:
@@ -139,4 +165,4 @@ class Lexer:
 
 
 if __name__ == "__main__":
-    print(Lexer.tokenize(input("Inserisci stringa da tokenizzare -> ")))
+    print(Lexer.tokenize(input("Inserisci stringa da tokenizzare -> ").replace("\\n", "\n")))

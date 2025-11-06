@@ -6,6 +6,24 @@ Questa è la documentazione
 
 Le varie istruzioni sono divise da un ritorno a capo o una virgola.
 
+Un cancelletto o hashtag `#` denota l'inizio di un commento su singola riga.
+
+```
+print("Ciao") # Questo è un commento
+```
+
+Per commenti multilinea utilizzare `#[` e `]#`. Include supporto per commenti annidati così non ti incavoli quando commenti del codice con la struttura multilinea e c'è un'altro commento multilinea e quindi si impalla.
+
+```
+#[
+    Questo è un commento
+    su più linee
+    #[
+        Guarda che figo
+    ]#
+]#
+```
+
 ## Tipi di dato
 
 Per ora ci sono interi, float, e stringhe
