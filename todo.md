@@ -4,7 +4,7 @@
 - [X] Transpiler base: stampa il risultato delle espressioni
 - [X] Input/Output base
 - [X] Documentazione
-- [ ] Commenti
+- [X] Commenti
 - [ ] Main
 - [ ] Definizione di variabili
 - [ ] Metodi per stringhe
