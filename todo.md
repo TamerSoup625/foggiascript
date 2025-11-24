@@ -5,11 +5,12 @@
 - [X] Input/Output base
 - [X] Documentazione
 - [X] Commenti
-- [ ] Main
+- [X] Main
 - [ ] Definizione di variabili
 - [ ] Metodi per stringhe
 - [ ] Blocchi if/else/elif
 - [ ] Blocchi while
 - [ ] Blocchi for
+- [ ] Main per vero
 - [ ] Extra?
 - [ ] Syntax Highlighter

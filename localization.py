@@ -41,3 +41,17 @@ class ErrorDesc(ABC):
     dot_without_expr = "Aspettavo un'espressione prima del punto."
     cannot_access_attribute = "Non puoi accedere all'attributo \"{name}\" dell'oggetto."
     unclosed_comment = 'Commento multilinea non è stato chiuso, utilizzare "]#".'
+
+
+class CommandArgs(ABC):
+    """
+    Contiene gli argomenti di riga di comando in tupla (lettera, parola).
+    """
+    output_file = ("-o", "--output")
+    output_default = "out.js"
+
+
+class CommandHelp(ABC):
+    description = "Il primo linguaggio di programmazione foggiano."
+    help_source = "Il percorso del file FoggiaScript di riferimento."
+    help_output = "Il percorso dove verrà messo il file JavaScript di output."

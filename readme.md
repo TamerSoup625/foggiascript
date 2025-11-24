@@ -19,3 +19,7 @@ Il file `localization.py` contiene varie parole e frasi. Se non sono in foggiano
 - Funzione `print()`
 - Accesso diretto a JS perché sono pigro
 - Basta
+
+## Eseguire codice
+
+Esegui `main.py` con argomento il file FoggiaScript di input per restituire il codice JavaScript di output.
